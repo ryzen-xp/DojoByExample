@@ -1,8 +1,9 @@
+# Dojo by Example
+
 <p align="center">
   <img src="Cover.png" alt="Dojo by Example Cover" width="600">
 </p>
 
-# Dojo by Example
 
 ## Introduction
 
