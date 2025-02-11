@@ -1312,7 +1312,7 @@
         },
         {
           "type": "enum",
-          "name": "dojo_starter::models::Direction",
+          "name": "dojo_starter::models::model::Direction",
           "variants": [
             {
               "name": "Left",
@@ -1349,7 +1349,7 @@
               "inputs": [
                 {
                   "name": "direction",
-                  "type": "dojo_starter::models::Direction"
+                  "type": "dojo_starter::models::model::Direction"
                 }
               ],
               "outputs": [],

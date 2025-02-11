@@ -1,8 +1,21 @@
-pub mod systems {
-    pub mod actions;
+mod constants;
+mod store;
+
+mod systems {
+    mod actions;
 }
 
-pub mod models;
+mod models {
+    mod model;
+}
+
+mod types {
+    
+}
+
+mod utils {
+    
+}
 
 pub mod tests {
     mod test_world;
