@@ -5,7 +5,11 @@ mod models {
     mod model;
     mod beast;
     mod food;
-    mod player:
+    mod player;
+    mod tournament;
+    mod playerstats;
+    mod matchup;
+    mod reward;
 }
 
 mod systems {
