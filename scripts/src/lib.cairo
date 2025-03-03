@@ -1,13 +1,14 @@
 mod constants;
 mod store;
 
-mod systems {
-    mod actions;
-}
-
 mod models {
     mod model;
-    mod player;
+    mod food;
+    mod player:
+}
+
+mod systems {
+    mod actions;
 }
 
 mod types {
