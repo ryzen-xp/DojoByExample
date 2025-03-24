@@ -48,7 +48,7 @@ export default defineConfig({
           {
             name: "Cartridge",
             link: "https://docs.cartridge.gg/",
-            image: "/collaborators/cartridge.svg",
+            image: "/collaborators/Cartridge.svg",
           },
         ],
         [
