@@ -1,3 +1,13 @@
 {
-  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm build"
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "installCommand": "echo 'Skipping default install' && pnpm install --no-frozen-lockfile",
+        "buildCommand": "pnpm build"
+      }
+    }
+  ]
 }
