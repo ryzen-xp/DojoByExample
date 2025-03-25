@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/svg/Vertical_Dark.svg" alt="Dojo by Example Logo" width="600">
+  <img src="client/public/svg/Vertical_Dark.svg" alt="Dojo by Example Logo" width="600">
 </p>
 
 ## 👾 Introduction
