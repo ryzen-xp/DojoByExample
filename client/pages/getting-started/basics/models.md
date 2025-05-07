@@ -221,13 +221,6 @@ In Java, cleanup is associated with **garbage collection** and explicit resource
 ### Relation to Cairo's Drop
 Cairo's `Drop` derive is akin to these mechanisms, ensuring structs are safely deallocated when no longer needed, similar to Java's garbage collection or Go's `defer` for memory cleanup. However, `Drop` is specific to Cairo's provable computation model, guaranteeing memory safety in a resource-constrained environment.
 
-## Further Reading
-- [Entities in Dojo](./entities.md): Explore how entities act as unique IDs in ECS.
-- [Introspection in Dojo](./introspection.md): Learn more about querying models.
-- [Dojo Models Overview](https://docs.dojoengine.org/models): Official documentation for advanced features.
-- [Starknet Cairo Guide](https://www.cairo-lang.org/docs/): Master Cairo's syntax and types.
-- [Combat Game Models](https://github.com/AkatsukiLabs/DojoByExample/tree/main/backend/dojo_examples/combat_game/src/models): Source for the examples used here.
-
 ## Conclusion
 
 Models are the core of game state management in Dojo Engine, defining how data is structured and stored on Starknet. By combining models with **entities** and **systems** in the **ECS** pattern, you can build dynamic, decentralized games. This guide covered the anatomy of models, their role in ECS, practical examples from a combat game, and cleanup mechanisms in Java, Go, and JavaScript for broader context. Dive into the linked resources, experiment with the code, and join the Dojo community to create your own on-chain games!
