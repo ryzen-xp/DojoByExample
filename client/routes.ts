@@ -88,6 +88,16 @@ const config: Sidebar = [
     ],
   },
   {
+    text: "Starters & Templates",
+    collapsed: true,
+    items: [
+      {
+        text: "Full Starter React",
+        link: "/starters/full-react-starter",
+      },
+    ],
+  },
+  {
     text: "Applications",
     collapsed: true,
     items: [
@@ -128,14 +138,6 @@ const config: Sidebar = [
         link: "/integrations/react",
       },
       {
-        text: "Telegram",
-        link: "/integrations/telegram",
-      },
-      {
-        text: "Discord",
-        link: "/integrations/discord",
-      },
-      {
         text: "Unity",
         link: "/integrations/unity",
       },
@@ -149,14 +151,6 @@ const config: Sidebar = [
           {
             text: "Eliza",
             link: "/integrations/ai/eliza",
-          },
-          {
-            text: "OpenAI",
-            link: "/integrations/ai/openai",
-          },
-          {
-            text: "OpenRouter",
-            link: "/integrations/ai/openrouter",
           },
         ],
       },
