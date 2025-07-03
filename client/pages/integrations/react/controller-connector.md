@@ -1,52 +1,83 @@
-# Cartridge Controller Connector
+# Controller Connector
 
-## 📌 File Overview & Purpose
+The `cartridgeConnector.tsx` file configures the Cartridge Controller integration for your Dojo game. This connector enables seamless wallet functionality specifically designed for gaming, eliminating transaction popups and providing session-based authentication that keeps players focused on gameplay rather than blockchain complexity.
 
-```ts
+## File Overview & Purpose
+
+The `cartridgeConnector.tsx` file creates and configures a Cartridge Controller connector that serves as the bridge between your game interface and player wallets. Unlike traditional DeFi wallet connectors, this configuration prioritizes gaming user experience through:
+
+- **Session-Based Authentication**: Pre-approved game actions that don't require individual transaction confirmations.
+- **Multi-Environment Support**: Automatic network switching between localhost, sepolia, and mainnet.
+- **Dynamic Contract Resolution**: Automatically resolves contract addresses from your Dojo manifest.
+- **Gaming-Optimized RPC**: Uses Cartridge's gaming-focused endpoints for better performance.
+
+This connector transforms blockchain interactions from a technical hurdle into a seamless gaming experience, allowing players to focus on strategy and fun rather than transaction management.
+
+## Complete Implementation
+
+```typescript
 import { Connector } from "@starknet-react/core";
 import { ControllerConnector } from "@cartridge/connector";
-import {
-  ColorMode,
-  SessionPolicies,
-  ControllerOptions,
-} from "@cartridge/controller";
+import { ControllerOptions } from "@cartridge/controller";
 import { constants } from "starknet";
+import { manifest } from "./manifest";
 
 const { VITE_PUBLIC_DEPLOY_TYPE } = import.meta.env;
 
-const CONTRACT_ADDRESS_GAME =
-  "0x36a518498c1d7de4106b8904f0878e1e7b78c73614001fba22eba0adca80387";
+console.log("VITE_PUBLIC_DEPLOY_TYPE", VITE_PUBLIC_DEPLOY_TYPE);
 
-const policies: SessionPolicies = {
+const getRpcUrl = () => {
+  switch (VITE_PUBLIC_DEPLOY_TYPE) {
+    case "localhost":
+      return "http://localhost:5050"; // Katana localhost default port
+    case "mainnet":
+      return "https://api.cartridge.gg/x/starknet/mainnet";
+    case "sepolia":
+      return "https://api.cartridge.gg/x/starknet/sepolia";
+    default:
+      return "https://api.cartridge.gg/x/starknet/sepolia";
+  }
+};
+
+const getDefaultChainId = () => {
+  switch (VITE_PUBLIC_DEPLOY_TYPE) {
+    case "localhost":
+      return "0x4b4154414e41"; // KATANA in ASCII
+    case "mainnet":
+      return constants.StarknetChainId.SN_MAIN;
+    case "sepolia":
+      return constants.StarknetChainId.SN_SEPOLIA;
+    default:
+      return constants.StarknetChainId.SN_SEPOLIA;
+  }
+};
+
+const getGameContractAddress = () => {
+  return manifest.contracts[0].address;
+};
+
+const CONTRACT_ADDRESS_GAME = getGameContractAddress();
+console.log("Using game contract address:", CONTRACT_ADDRESS_GAME);
+
+const policies = {
   contracts: {
     [CONTRACT_ADDRESS_GAME]: {
       methods: [
         { name: "spawn_player", entrypoint: "spawn_player" },
-        { name: "reward_player", entrypoint: "reward_player" },
+        { name: "train", entrypoint: "train" },
+        { name: "mine", entrypoint: "mine" },
+        { name: "rest", entrypoint: "rest" },
       ],
     },
   },
 };
 
-// Controller basic configuration
-const colorMode: ColorMode = "dark";
-const theme = "golem-runner";
-
 const options: ControllerOptions = {
-  chains: [
-    {
-      rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
-    },
-  ],
-  defaultChainId:
-    VITE_PUBLIC_DEPLOY_TYPE === "mainnet"
-      ? constants.StarknetChainId.SN_MAIN
-      : constants.StarknetChainId.SN_SEPOLIA,
+  chains: [{ rpcUrl: getRpcUrl() }],
+  defaultChainId: getDefaultChainId(),
   policies,
-  theme,
-  colorMode,
-  namespace: "golem_runner",
-  slot: "golem7",
+  namespace: "full_starter_react",
+  slot: "full-starter-react",
 };
 
 const cartridgeConnector = new ControllerConnector(
@@ -56,160 +87,269 @@ const cartridgeConnector = new ControllerConnector(
 export default cartridgeConnector;
 ```
 
-The `cartridgeConnector.tsx` file initializes and exports a configured `ControllerConnector` instance. This is essential for enabling secure, seamless interactions between your Dojo game and the Starknet blockchain via Cartridge.
+## Imports and Dependencies
 
-- It defines the RPC and network settings.
-- Pre-authorizes smart contract method calls using session policies.
-- Connects with Starknet React through a `Connector` interface.
+### Starknet React Integration
 
----
-
-## 📦 Imports and Dependencies
-
-```ts
+```typescript
 import { Connector } from "@starknet-react/core";
+```
+
+- **Purpose**: Base interface that allows the Cartridge Controller to integrate seamlessly with Starknet React's provider system.
+
+### Cartridge Controller Core
+
+```typescript
 import { ControllerConnector } from "@cartridge/connector";
-import {
-  ColorMode,
-  SessionPolicies,
-  ControllerOptions,
-} from "@cartridge/controller";
+import { ControllerOptions } from "@cartridge/controller";
+```
+
+- **Components**:
+  - **ControllerConnector**: The main connector class that implements gaming-optimized wallet functionality.
+  - **ControllerOptions**: TypeScript interface for connector configuration.
+- **Gaming Benefits**: These imports provide session management, transaction batching, and user-friendly interfaces designed specifically for gaming applications.
+
+### Starknet Constants
+
+```typescript
 import { constants } from "starknet";
 ```
 
-**Explanation:**
+- **Purpose**: Provides standardized chain identifiers for different Starknet networks.
+- **Usage**: Ensures consistent network identification across localhost (Katana), sepolia testnet, and mainnet deployments.
 
-- `Connector` — Interface for wallet connectors in `@starknet-react/core`.
-- `ControllerConnector` — Implements the `Connector` interface for Cartridge Controller.
-- `ColorMode`, `SessionPolicies`, `ControllerOptions` — Type definitions for styling and access control.
-- `constants` — Provides network chain IDs (e.g., `SN_SEPOLIA`, `SN_MAIN`).
+### Dojo Manifest Integration
 
----
-
-## 🌍 Environment Configuration
-
-```ts
-const { VITE_PUBLIC_DEPLOY_TYPE } = import.meta.env;
-```
-
-This variable controls the target deployment environment:
-
-- `mainnet`: Starknet main network
-- `sepolia`: Starknet Sepolia testnet
-
-This pattern allows safe, environment-specific configuration via `.env` files.
-
----
-
-## 📜 Contract Address Resolution
-
-```ts
-const CONTRACT_ADDRESS_GAME =
-  "0x36a518498c1d7de4106b8904f0878e1e7b78c73614001fba22eba0adca80387";
-```
-
-Here, the contract address is hardcoded. In a more dynamic setup, it's advisable to resolve this from a manifest:
-
-```ts
+```typescript
 import { manifest } from "./manifest";
-const getGameContractAddress = () => manifest.contracts[0].address;
 ```
 
-### Why Manifest?
+- **Purpose**: Imports your Dojo deployment manifest containing contract addresses and metadata.
+- **Gaming Advantage**: Eliminates hardcoded addresses, allowing seamless deployment across different networks without code changes.
 
-The `manifest.json` file in Dojo contains deployment metadata for contracts. Using it ensures flexibility across networks.
+## Environment Configuration
 
----
+### Environment Detection
 
-## 🛡️ Session Policies Configuration
+```typescript
+const { VITE_PUBLIC_DEPLOY_TYPE } = import.meta.env;
+console.log("VITE_PUBLIC_DEPLOY_TYPE", VITE_PUBLIC_DEPLOY_TYPE);
+```
 
-```ts
-const policies: SessionPolicies = {
+- **Gaming Deployment Strategy**:
+  - **localhost**: Rapid development with local Katana node.
+  - **sepolia**: Safe testing with real network conditions.
+  - **mainnet**: Production environment with real player assets.
+- **Developer Experience**: The `console.log` helps debug deployment configuration during development.
+
+### RPC Provider Configuration
+
+```typescript
+const getRpcUrl = () => {
+  switch (VITE_PUBLIC_DEPLOY_TYPE) {
+    case "localhost":
+      return "http://localhost:5050"; // Katana localhost default port
+    case "mainnet":
+      return "https://api.cartridge.gg/x/starknet/mainnet";
+    case "sepolia":
+      return "https://api.cartridge.gg/x/starknet/sepolia";
+    default:
+      return "https://api.cartridge.gg/x/starknet/sepolia";
+  }
+};
+```
+
+- **Network-Specific Configuration**:
+
+| Environment | Endpoint                                    | Gaming Purpose                                 |
+| ----------- | ------------------------------------------- | ---------------------------------------------- |
+| localhost   | http://localhost:5050                       | Local Katana for rapid development and testing |
+| mainnet     | https://api.cartridge.gg/x/starknet/mainnet | Production gaming with real assets             |
+| sepolia     | https://api.cartridge.gg/x/starknet/sepolia | Safe testing environment                       |
+| default     | Sepolia fallback                            | Prevents accidental mainnet usage              |
+
+- **Why Cartridge RPC Endpoints?**:
+  - **Gaming Optimization**: Endpoints tuned for gaming transaction patterns and session management.
+  - **Reliability**: High uptime crucial for uninterrupted gaming experiences.
+  - **Performance**: Reduced latency for real-time game interactions.
+
+### Chain ID Configuration
+
+```typescript
+const getDefaultChainId = () => {
+  switch (VITE_PUBLIC_DEPLOY_TYPE) {
+    case "localhost":
+      return "0x4b4154414e41"; // KATANA in ASCII
+    case "mainnet":
+      return constants.StarknetChainId.SN_MAIN;
+    case "sepolia":
+      return constants.StarknetChainId.SN_SEPOLIA;
+    default:
+      return constants.StarknetChainId.SN_SEPOLIA;
+  }
+};
+```
+
+- **Chain ID Mapping**:
+
+  - **localhost**: "0x4b4154414e41" (ASCII encoding of "KATANA").
+  - **mainnet**: `constants.StarknetChainId.SN_MAIN` (Official Starknet mainnet ID).
+  - **sepolia**: `constants.StarknetChainId.SN_SEPOLIA` (Official Starknet testnet ID).
+
+- **Gaming Benefits**: Automatic chain selection ensures players connect to the correct network without manual configuration, maintaining the seamless experience expected in modern games.
+
+## Contract Address Resolution
+
+### Dynamic Address Resolution
+
+```typescript
+const getGameContractAddress = () => {
+  return manifest.contracts[0].address;
+};
+
+const CONTRACT_ADDRESS_GAME = getGameContractAddress();
+console.log("Using game contract address:", CONTRACT_ADDRESS_GAME);
+```
+
+- **Manifest Integration Benefits**:
+
+  - **Deployment Flexibility**: Contract addresses automatically update when deploying to different networks.
+  - **No Hardcoding**: Eliminates the need to manually update addresses in code.
+  - **Environment Safety**: Prevents using wrong contract addresses across different deployments.
+
+- **Gaming Context**: Players interact with the correct game contract regardless of whether they're on localhost development, sepolia testing, or mainnet production.
+
+## Session Policies Configuration
+
+### Gaming-Focused Session Policies
+
+```typescript
+const policies = {
   contracts: {
     [CONTRACT_ADDRESS_GAME]: {
       methods: [
         { name: "spawn_player", entrypoint: "spawn_player" },
-        { name: "reward_player", entrypoint: "reward_player" },
+        { name: "train", entrypoint: "train" },
+        { name: "mine", entrypoint: "mine" },
+        { name: "rest", entrypoint: "rest" },
       ],
     },
   },
 };
 ```
 
-### What are session policies?
+- **What Are Session Policies?**: Session policies define which contract methods players can execute without individual transaction approval popups. This creates a traditional gaming experience where actions happen immediately.
 
-Session policies define which contract methods can be invoked by the connected user **without explicit approval** each time. This improves UX by reducing wallet prompts.
+- **Gaming UX Benefits**:
 
-### Customizing:
+  - **No Transaction Interruptions**: Players can train, mine, and rest without constant wallet popups.
+  - **Seamless Gameplay Flow**: Actions execute immediately, maintaining game immersion.
+  - **Traditional Game Feel**: Blockchain interactions become invisible to players.
 
-To add more methods:
+- **Method Breakdown**:
 
-```ts
-{ name: "train", entrypoint: "train" }
+  - **spawn_player**: Create new player character (one-time setup).
+  - **train**: Improve player experience and skills.
+  - **mine**: Earn in-game currency with resource gathering.
+  - **rest**: Restore player health and energy.
+
+- **Adding New Game Actions**:
+
+```typescript
+// To add new methods to session policies:
+{ name: "craft_item", entrypoint: "craft_item" },
+{ name: "battle_monster", entrypoint: "battle_monster" },
 ```
 
-To support multiple contracts:
+## Controller Options Configuration
 
-```ts
-contracts: {
-  [address1]: { methods: [...] },
-  [address2]: { methods: [...] },
-}
-```
+### Complete Options Setup
 
----
-
-## 🎨 Controller Options Configuration
-
-```ts
-const colorMode: ColorMode = "dark";
-const theme = "golem-runner";
-
+```typescript
 const options: ControllerOptions = {
-  chains: [
-    {
-      rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
-    },
-  ],
-  defaultChainId:
-    VITE_PUBLIC_DEPLOY_TYPE === "mainnet"
-      ? constants.StarknetChainId.SN_MAIN
-      : constants.StarknetChainId.SN_SEPOLIA,
+  chains: [{ rpcUrl: getRpcUrl() }],
+  defaultChainId: getDefaultChainId(),
   policies,
-  theme,
-  colorMode,
-  namespace: "golem_runner",
-  slot: "golem7",
+  namespace: "full_starter_react",
+  slot: "full-starter-react",
 };
 ```
 
-### Explanation of fields:
+- **Option Properties Breakdown**:
 
-- `chains`: RPC URLs for supported Starknet chains
-- `defaultChainId`: Auto-selects the chain based on environment
-- `policies`: Session policies defined earlier
-- `theme`, `colorMode`: UI appearance control
-- `namespace`: Cartridge app namespace (must be registered on Cartridge)
-- `slot`: Specific session or app slot for isolation
+  - **chains**: `[{ rpcUrl: getRpcUrl() }]`
 
----
+    - **Purpose**: Defines available blockchain networks with their RPC endpoints.
+    - **Gaming Implementation**: Automatically configures the appropriate network based on deployment environment, ensuring players connect to the correct game instance.
 
-## 🔗 Connector Instantiation
+  - **defaultChainId**: `getDefaultChainId()`
 
-```ts
+    - **Purpose**: Sets the primary network for wallet connections.
+    - **Gaming Benefit**: Players automatically connect to the intended game network without manual network switching.
+
+  - **policies**
+
+    - **Purpose**: Defines pre-approved contract methods for seamless execution.
+    - **Gaming Impact**: Transforms blockchain interactions from technical obstacles into smooth gaming actions.
+
+  - **namespace**: `"full_starter_react"`
+
+    - **Purpose**: Unique identifier for your game application within the Cartridge ecosystem.
+    - **Requirements**: Must match your registered Cartridge application namespace for proper session management and policies.
+
+  - **slot**: `"full-starter-react"`
+    - **Purpose**: Specific session identifier for isolating different game instances or versions.
+    - **Gaming Use Cases**: Allows running multiple game versions or environments with separate session policies.
+
+## Connector Instantiation
+
+### TypeScript Integration
+
+```typescript
 const cartridgeConnector = new ControllerConnector(
   options
 ) as never as Connector;
 ```
 
-This line creates the actual connector using your `options`. The TypeScript casting (`as never as Connector`) ensures compatibility with `@starknet-react/core` expectations.
+- **Technical Explanation**: The `as never as Connector` casting ensures TypeScript compatibility between Cartridge's `ControllerConnector` and Starknet React's `Connector` interface.
+- **Why This Casting?**: Different package versions may have slight interface differences, and this casting guarantees compatibility while maintaining full functionality.
+- **Gaming Result**: Your game can use standard Starknet React hooks while benefiting from Cartridge's gaming-specific features.
 
-### Usage in App:
+## Integration with StarknetProvider
 
-```ts
-<StarknetProvider connectors={[cartridgeConnector]}>
-  <App />
-</StarknetProvider>
+### Provider Usage
+
+```jsx
+// In your StarknetProvider configuration
+<StarknetConfig
+  connectors={[cartridgeConnector]}
+  // ... other props
+>
+  {children}
+</StarknetConfig>
 ```
 
----
+- **Gaming Flow**: The connector integrates seamlessly with your StarknetProvider, enabling gaming-optimized wallet functionality throughout your application.
+
+## Environment Setup Examples
+
+### Development Configuration
+
+```plaintext
+# .env.development
+VITE_PUBLIC_DEPLOY_TYPE=localhost
+```
+
+### Testing Configuration
+
+```plaintext
+# .env.staging
+VITE_PUBLIC_DEPLOY_TYPE=sepolia
+```
+
+### Production Configuration
+
+```plaintext
+# .env.production
+VITE_PUBLIC_DEPLOY_TYPE=mainnet
+```
