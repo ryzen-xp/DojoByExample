@@ -353,3 +353,23 @@ VITE_PUBLIC_DEPLOY_TYPE=sepolia
 # .env.production
 VITE_PUBLIC_DEPLOY_TYPE=mainnet
 ```
+
+# Gaming Benefits Summary
+
+## For Players:
+
+- **No Transaction Popups**: Enjoy uninterrupted gameplay without transaction confirmation popups.
+- **Automatic Network Connection**: Seamlessly connect to the correct game environment based on your deployment.
+- **Traditional Gaming Experience**: Experience the benefits of blockchain technology while enjoying a familiar gaming interface.
+
+## For Developers:
+
+- **Environment-Based Deployment**: Deploy your game across different environments without needing to change the code.
+- **Dynamic Contract Address Resolution**: Automatically resolve contract addresses from the manifest, eliminating hardcoded values.
+- **Gaming-Optimized RPC Endpoints**: Benefit from RPC endpoints designed specifically for gaming, ensuring better performance.
+
+## For Game Operations:
+
+- **Session-Based Policies**: Reduce player friction by allowing pre-approved actions without constant confirmations.
+- **Automatic Environment Detection**: Prevent deployment errors with automatic detection of the current environment.
+- **Reliable Performance**: Leverage Cartridge's gaming infrastructure to ensure consistent and reliable game performance.
