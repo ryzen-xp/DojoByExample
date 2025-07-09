@@ -98,24 +98,6 @@ const config: Sidebar = [
     ],
   },
   {
-    text: "Applications",
-    collapsed: true,
-    items: [
-      {
-        text: "Cartridge Controller",
-        link: "/applications/cartridge_controller",
-      },
-      {
-        text: "ERC20 Token",
-        link: "/applications/erc20",
-      },
-      {
-        text: "ERC721 NFT",
-        link: "/applications/erc721",
-      },
-    ],
-  },
-  {
     text: "Advanced concepts",
     collapsed: true,
     items: [
@@ -172,15 +154,15 @@ const config: Sidebar = [
           ],
         },
         {
-          text: "Data Bindings",
+          text: "Bindings",
           items: [
-            {
-              text: "Contracts Bindings",
-              link: "/integrations/react/bindings/contracts-bindings",
-            },
             {
               text: "Models Bindings",
               link: "/integrations/react/bindings/models-bindings",
+            },
+            {
+              text: "Contracts Bindings",
+              link: "/integrations/react/bindings/contracts-bindings",
             },
           ],
         },
