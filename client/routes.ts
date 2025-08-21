@@ -75,7 +75,20 @@ const config: Sidebar = [
       },
       {
         text: "Torii",
-        link: "/deployments/torii",
+        items: [
+          {
+            text: "Overview",
+            link: "/deployments/torii/overview",
+          },
+          {
+            text: "Deploy Torii Indexer",
+            link: "/deployments/torii/deploy-indexer",
+          },
+          {
+            text: "Client Integration",
+            link: "/deployments/torii/client-integration",
+          },
+        ],
       },
       {
         text: "Sepolia",
