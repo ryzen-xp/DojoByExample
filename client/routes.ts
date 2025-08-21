@@ -74,6 +74,10 @@ const config: Sidebar = [
         link: "/deployments/slot",
       },
       {
+        text: "Torii",
+        link: "/deployments/torii",
+      },
+      {
         text: "Sepolia",
         items: [
           {
