@@ -70,20 +70,34 @@ const config: Sidebar = [
     collapsed: true,
     items: [
       {
-        text: "Katana",
-        link: "/deployments/katana",
-      },
-      {
         text: "Slot",
         link: "/deployments/slot",
       },
       {
         text: "Sepolia",
-        link: "/deployments/sepolia",
+        items: [
+          {
+            text: "Deploy your dojo contracts to Sepolia",
+            link: "/deployments/sepolia/contracts-deploy-sepolia",
+          },
+          {
+            text: "Integrate your client with Sepolia",
+            link: "/deployments/sepolia/client-sepolia-integration",
+          },
+        ],
       },
       {
         text: "Mainnet",
-        link: "/deployments/mainnet",
+        items: [
+          {
+            text: "Deploy your dojo contracts to Mainnet",
+            link: "/deployments/mainnet/contracts-deploy-mainnet",
+          },
+          {
+            text: "Integrate your client with Mainnet",
+            link: "/deployments/mainnet/client-mainnet-integration",
+          },
+        ],
       },
     ],
   },
@@ -175,19 +189,6 @@ const config: Sidebar = [
       {
         text: "Unity",
         link: "/integrations/unity",
-      },
-      {
-        text: "AI Agents",
-        items: [
-          {
-            text: "Daydreams",
-            link: "/integrations/ai/daydreams",
-          },
-          {
-            text: "Eliza",
-            link: "/integrations/ai/eliza",
-          },
-        ],
       },
     ],
   },
