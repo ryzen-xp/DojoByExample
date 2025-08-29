@@ -345,7 +345,7 @@ pub impl StoreImpl of StoreTrait {
                 found = true;
                 break;
             }
-        }
+        };
         found
     }
 
