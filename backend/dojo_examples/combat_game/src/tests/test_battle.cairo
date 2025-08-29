@@ -456,7 +456,7 @@ mod battle_system {
 
             assert(damage > 0, 'Should deal damage');
             turn_count += 1;
-        }
+        };
 
         // End battle manually if not finished
         let mut battle: Battle = world.read_model((battle_id));
