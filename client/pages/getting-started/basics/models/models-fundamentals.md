@@ -406,13 +406,6 @@ Now that you have a solid foundation, explore these advanced topics:
 - **World Management**: Understand how the World contract orchestrates your game state
 - **Query Optimization**: Advanced techniques for efficient model queries
 
-### Practice Exercises
 
-Try creating models for these game scenarios:
-
-1. **Guild System**: Create models for guilds, memberships, and guild stats
-2. **Trading System**: Model items, trades, and marketplace listings  
-3. **Quest System**: Design models for quests, objectives, and rewards
-4. **Battle System**: Create models for combat stats, abilities, and battle results
-
-Remember: Start simple, test thoroughly, and gradually add complexity as you become more comfortable with the ECS pattern in Dojo!
+### Remember: 
+Start simple, test thoroughly, and gradually add complexity as you become more comfortable with the ECS pattern in Dojo!
